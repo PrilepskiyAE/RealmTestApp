@@ -66,6 +66,7 @@ fun Container() {
 
 
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginContent(){
@@ -82,6 +83,7 @@ fun LoginContent(){
         )
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordContent(){
@@ -89,6 +91,7 @@ fun PasswordContent(){
         val password = remember { mutableStateOf(TextFieldValue()) }
         Text(text = "Password")
         TextField(
+
             value = password.value,
             onValueChange = { password.value = it },
             label = { Text(text = "Password") },
@@ -96,6 +99,7 @@ fun PasswordContent(){
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password
             )
+
         )
 
         var result = "incorrect"
