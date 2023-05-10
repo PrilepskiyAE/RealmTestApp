@@ -3,11 +3,18 @@ package com.prilepskiy.realmtestapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -55,9 +62,12 @@ fun Container() {
     Box(modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Column() {
+        Column(Modifier.fillMaxWidth(),verticalArrangement = Arrangement.Center,horizontalAlignment = Alignment.CenterHorizontally) {
             LoginContent()
             PasswordContent()
+            RegistrationLoginContent()
+            ForgotPass()
+
         }
 
 
@@ -83,7 +93,6 @@ fun LoginContent(){
         )
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordContent(){
@@ -115,7 +124,77 @@ fun PasswordContent(){
             color = textColor,
             fontFamily = FontFamily.SansSerif,
             fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(top = 25.dp)
+            modifier = Modifier.padding(top = 20.dp)
+        )
+    }
+}
+@Composable
+fun RegistrationLoginContent(){
+    val (showDialog, setShowDialog) =  remember { mutableStateOf(false) }
+Row(Modifier.padding(16.dp).fillMaxWidth(), Arrangement.Center) {
+    Button(onClick = { /*TODO*/ },Modifier.padding(25.dp)) {
+        Text("Login", fontSize = 20.sp)
+    }
+    Button(onClick = {
+        setShowDialog(true)
+                     },Modifier.padding(25.dp)) {
+        Text("Regis", fontSize = 20.sp)
+    }
+}
+    DialogDemo(showDialog, setShowDialog)
+}
+@Composable
+fun ForgotPass(){
+    Column() {
+    Button(onClick = { /*TODO*/ },Modifier.padding(10.dp),colors = ButtonDefaults.buttonColors(Color.LightGray, contentColor = Color.Black),
+        border = BorderStroke(3.dp, Color.DarkGray)
+    ) {
+        Text("forgot your password", fontSize = 16.sp)
+    }
+}}
+
+@Composable
+fun DialogRegistration(){
+    val openDialog = remember { mutableStateOf(false) }
+
+}
+
+@Composable
+fun DialogForgotPass(){
+
+}
+@Composable
+fun DialogDemo(showDialog: Boolean, setShowDialog: (Boolean) -> Unit) {
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = {
+            },
+            title = {
+                Text("Title")
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        // Change the state to close the dialog
+                        setShowDialog(false)
+                    },
+                ) {
+                    Text("Confirm")
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        // Change the state to close the dialog
+                        setShowDialog(false)
+                    },
+                ) {
+                    Text("Dismiss")
+                }
+            },
+            text = {
+                Text("This is a text on the dialog")
+            },
         )
     }
 }
