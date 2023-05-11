@@ -5,8 +5,10 @@
 package com.prilepskiy.realmtestapp.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -48,6 +50,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    val viewModel:MainViewModel  by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -57,25 +60,27 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Container()
+                    Container(viewModel)
                 }
             }
         }
     }
 }
 
-@Preview
+
 @Composable
-fun Container() {
+fun Container(viewModel:MainViewModel) {
 
     Box(modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Column(Modifier.fillMaxWidth(),verticalArrangement = Arrangement.Center,horizontalAlignment = Alignment.CenterHorizontally) {
-            LoginContent()
-            PasswordContent()
-            RegistrationLoginContent()
-            ForgotPass()
+            LoginContent {
+                Log.d("TAG", "Container: $it")
+            }
+            PasswordContent({})
+            RegistrationLoginContent({},{})
+            ForgotPass({})
 
         }
 

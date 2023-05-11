@@ -27,9 +27,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.prilepskiy.realmtestapp.domain.model.UserModel
+
 
 @Composable
-fun ForgotPass(){
+fun ForgotPass(resetPass:(email:String)->Unit){
     val (showDialog, setShowDialog) =  remember { mutableStateOf(false) }
     Column() {
         Button(onClick = { setShowDialog(true) },
@@ -39,12 +41,12 @@ fun ForgotPass(){
             Text("forgot your password", fontSize = 16.sp)
         }
     }
-    DialogForgotPass(showDialog, setShowDialog)
+    DialogForgotPass(showDialog, setShowDialog, resetPass)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DialogRegistration(showDialog: Boolean, setShowDialog: (Boolean) -> Unit){
+fun DialogRegistration(showDialog: Boolean, setShowDialog: (Boolean) -> Unit,reg:(user:UserModel)->Unit){
     if (showDialog) {
         val nameState = remember { mutableStateOf(TextFieldValue()) }
         val emailState = remember { mutableStateOf(TextFieldValue()) }
@@ -60,7 +62,14 @@ fun DialogRegistration(showDialog: Boolean, setShowDialog: (Boolean) -> Unit){
             confirmButton = {
                 Button(
                     onClick = {
-                        // Change the state to close the dialog
+                        reg(
+                            UserModel(
+                                id=0,//TODO добавить автогенерацию id
+                                name = nameState.value.text,
+                                email=  emailState.value.text,
+                                pass=passwordState.value.text,
+                                address = addressState.value.text
+                            ))
                         setShowDialog(false)
                     },
                 ) {
@@ -70,7 +79,6 @@ fun DialogRegistration(showDialog: Boolean, setShowDialog: (Boolean) -> Unit){
             dismissButton = {
                 Button(
                     onClick = {
-                        // Change the state to close the dialog
                         setShowDialog(false)
                     },
                 ) {
@@ -127,8 +135,9 @@ fun DialogRegistration(showDialog: Boolean, setShowDialog: (Boolean) -> Unit){
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DialogForgotPass(showDialog: Boolean, setShowDialog: (Boolean) -> Unit){
+fun DialogForgotPass(showDialog: Boolean, setShowDialog: (Boolean) -> Unit,resetPass:(email:String)->Unit){
     if (showDialog) {
         AlertDialog(
             onDismissRequest = {
@@ -180,7 +189,7 @@ fun DialogForgotPass(showDialog: Boolean, setShowDialog: (Boolean) -> Unit){
 }
 
 @Composable
-fun LoginContent(){
+fun LoginContent(login:(email:String)->Unit){
     Column(Modifier.padding(25.dp)) {
         Text(text = "Login/Email")
         val textState = remember { mutableStateOf(TextFieldValue()) }
@@ -192,11 +201,12 @@ fun LoginContent(){
                 keyboardType = KeyboardType.Email
             )
         )
+        login(textState.value.text)
     }
 }
 
 @Composable
-fun PasswordContent(){
+fun PasswordContent(pass:(email:String)->Unit){
     Column(Modifier.padding(25.dp)) {
         val password = remember { mutableStateOf(TextFieldValue()) }
         Text(text = "Password")
@@ -212,31 +222,20 @@ fun PasswordContent(){
 
         )
 
-        var result = "incorrect"
-        var textColor = Color.Red
-        if (password.value.text == "secret"){
-            result = "correct"
-            textColor = Color.Green
-        }
+        //var result = ""
+       // var textColor = Color.Red
+       pass(password.value.text)
 
-        Text(
-            text = "Password : $result",
-            fontSize = 22.sp,
-            color = textColor,
-            fontFamily = FontFamily.SansSerif,
-            fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(top = 20.dp)
-        )
-    }
+}
 }
 @Composable
-fun RegistrationLoginContent(){
+fun RegistrationLoginContent(login:()->Unit,reg:(user:UserModel)->Unit){
     val (showDialog, setShowDialog) =  remember { mutableStateOf(false) }
     Row(
         Modifier
             .padding(16.dp)
             .fillMaxWidth(), Arrangement.Center) {
-        Button(onClick = { /*TODO*/ },Modifier.padding(25.dp)) {
+        Button(onClick = { login() },Modifier.padding(25.dp)) {
             Text("Login", fontSize = 20.sp)
         }
         Button(onClick = {
@@ -245,5 +244,5 @@ fun RegistrationLoginContent(){
             Text("Regis", fontSize = 20.sp)
         }
     }
-    DialogRegistration(showDialog, setShowDialog)
+    DialogRegistration(showDialog, setShowDialog,reg)
 }
