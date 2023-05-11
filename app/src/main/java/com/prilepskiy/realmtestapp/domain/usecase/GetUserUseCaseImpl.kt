@@ -7,7 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class GetUserUseCaseImpl(private val rep: AuthRepository): GetUserUseCase {
-    override suspend fun invoke(id: Long): UserModel = withContext(Dispatchers.IO){
-        return@withContext rep.getUser(id)
+    override suspend fun invoke(email:String): UserModel? = withContext(Dispatchers.IO){
+        return@withContext rep.getUser(email)
     }
 }

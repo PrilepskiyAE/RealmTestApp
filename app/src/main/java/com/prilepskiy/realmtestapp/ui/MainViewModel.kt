@@ -9,6 +9,8 @@ import com.prilepskiy.realmtestapp.domain.interactor.GetUsersUseCase
 import com.prilepskiy.realmtestapp.domain.interactor.UpdateUserUseCase
 import com.prilepskiy.realmtestapp.domain.model.UserModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,7 +23,27 @@ class MainViewModel @Inject constructor(
     private val updateUserUseCase: UpdateUserUseCase
 
 ) : ViewModel() {
+    private val _emailState: MutableStateFlow<String?> by lazy { MutableStateFlow(null) }
+    private val _passState: MutableStateFlow<String?> by lazy { MutableStateFlow(null) }
+    val emailState=_emailState.asStateFlow()
+    val passState=_passState.asStateFlow()
 
+    private val _userState: MutableStateFlow<UserModel?> by lazy { MutableStateFlow(null) }
+    val userState=_userState.asStateFlow()
+
+    fun setEmail(email:String){
+        viewModelScope.launch {
+            _emailState.emit(email)
+        }
+
+    }
+
+    fun setPass(pass:String){
+        viewModelScope.launch {
+            _passState.emit(pass)
+        }
+
+    }
 
     fun addUser(user: UserModel) {
         viewModelScope.launch { addUserUseCase.invoke(user) }
@@ -35,8 +57,17 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch { getUsersUseCase.invoke() }
     }
 
-    fun getUser(id: Long) {
-        viewModelScope.launch { getUserUseCase.invoke(id) }
+   private fun loginUser() {
+        viewModelScope.launch {
+            _userState.emit(getUserUseCase.invoke(emailState.value.toString()))
+
+        }
+    }
+    fun resetPassUser(email: String){
+        viewModelScope.launch {
+            val user= getUserUseCase.invoke(emailState.value.toString())
+            if (user!=null) updateUser(user)
+        }
     }
 
     fun updateUser(user: UserModel) {
