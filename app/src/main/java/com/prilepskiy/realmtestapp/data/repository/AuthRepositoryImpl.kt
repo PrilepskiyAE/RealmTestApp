@@ -13,7 +13,7 @@ class AuthRepositoryImpl@Inject constructor(): AuthRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getUser(id: Long): UserModel {
+    override suspend fun getUser(email:String): UserModel? {
         TODO("Not yet implemented")
     }
 

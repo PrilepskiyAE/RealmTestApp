@@ -1,4 +1,5 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+@file:OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3Api::class
 )
 
@@ -50,7 +51,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    val viewModel:MainViewModel  by viewModels()
+    private val viewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -69,24 +70,32 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun Container(viewModel:MainViewModel) {
+fun Container(viewModel: MainViewModel) {
 
-    Box(modifier = Modifier.fillMaxSize(),
+    Box(
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Column(Modifier.fillMaxWidth(),verticalArrangement = Arrangement.Center,horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             LoginContent {
-                Log.d("TAG", "Container: $it")
+                viewModel.setEmail(it)
             }
-            PasswordContent({})
-            RegistrationLoginContent({},{})
-            ForgotPass({})
+            PasswordContent {
+                viewModel.setPass(it)
+            }
+            RegistrationLoginContent({}, { viewModel.addUser(it) })
+            ForgotPass {
+                viewModel.resetPassUser(it)
+            }
 
         }
 
 
     }
-
 
 
 }
