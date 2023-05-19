@@ -109,7 +109,7 @@ fun DialogRegistration(showDialog: Boolean, setShowDialog: (Boolean) -> Unit,reg
                     Text(text = "Password")
 
                     TextField(
-                        value = nameState.value,
+                        value = passwordState.value,
                         onValueChange = { passwordState.value = it },
                         label = { Text(text = "Password") },
                         keyboardOptions = KeyboardOptions(

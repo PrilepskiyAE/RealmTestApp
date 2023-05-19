@@ -24,6 +24,7 @@ class AuthRepositoryImpl@Inject constructor(private val db: Realm): AuthReposito
         }
         val items: RealmResults<UserEntity> = db.query<UserEntity>().find()
         Log.d("TAG", "All User: $items ")
+
     }
 
     override suspend fun getUsers(): List<UserModel> {
@@ -44,7 +45,19 @@ class AuthRepositoryImpl@Inject constructor(private val db: Realm): AuthReposito
     }
 
     override suspend fun getUser(email:String): UserModel? {
-        TODO("Not yet implemented")
+        val inEmailItems: RealmResults<UserEntity> =
+            db.query<UserEntity>("email == $email")
+                .find()
+       if(inEmailItems.size>1){
+           Log.d("TAG", "getUser warning: ${inEmailItems.size}")
+           Log.d("TAG", "getUser -> warning: $inEmailItems")
+       }
+        return UserModel(
+            id=inEmailItems[0].id,
+            name = inEmailItems[0].name,
+            email = inEmailItems[0].email,
+            pass=inEmailItems[0].pass,
+            address = inEmailItems[0].address)
     }
 
     override suspend fun updateUser(user: UserModel) {
