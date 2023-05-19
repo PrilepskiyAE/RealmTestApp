@@ -1,8 +1,3 @@
-@file:OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class
-)
-
 package com.prilepskiy.realmtestapp.ui
 
 import android.os.Bundle
@@ -54,6 +49,7 @@ class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.getUsers()
         setContent {
             RealmTestAppTheme {
                 // A surface container using the 'background' color from the theme

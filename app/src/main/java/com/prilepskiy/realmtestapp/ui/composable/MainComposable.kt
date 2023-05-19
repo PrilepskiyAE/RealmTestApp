@@ -64,7 +64,6 @@ fun DialogRegistration(showDialog: Boolean, setShowDialog: (Boolean) -> Unit,reg
                     onClick = {
                         reg(
                             UserModel(
-                                id=0,//TODO добавить автогенерацию id
                                 name = nameState.value.text,
                                 email=  emailState.value.text,
                                 pass=passwordState.value.text,

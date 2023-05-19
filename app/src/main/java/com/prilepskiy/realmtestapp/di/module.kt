@@ -1,5 +1,6 @@
 package com.prilepskiy.realmtestapp.di
 
+import com.prilepskiy.realmtestapp.data.dataservice.UserEntity
 import com.prilepskiy.realmtestapp.data.repository.AuthRepositoryImpl
 import com.prilepskiy.realmtestapp.domain.interactor.AddUserUseCase
 import com.prilepskiy.realmtestapp.domain.interactor.DeleteUserUseCase
@@ -16,12 +17,25 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.components.SingletonComponent
+import io.realm.kotlin.Realm
+import io.realm.kotlin.RealmConfiguration
 
+@Module
+@InstallIn(SingletonComponent::class)
+class RealmModule{
+    @Provides
+    fun provideRepositoryModule(): Realm{
+        val config = RealmConfiguration.create(schema = setOf(UserEntity::class))
+
+        return Realm.open(config)
+    }
+}
 @Module
 @InstallIn(ViewModelComponent::class)
 class  AuthRepositoryModule {
     @Provides
-    fun provideRepositoryModule(): AuthRepository = AuthRepositoryImpl()
+    fun provideRepositoryModule(db:Realm): AuthRepository = AuthRepositoryImpl(db)
 }
 @Module
 @InstallIn(ViewModelComponent::class)
