@@ -1,5 +1,6 @@
 package com.prilepskiy.realmtestapp.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.prilepskiy.realmtestapp.domain.interactor.AddUserUseCase
@@ -54,7 +55,9 @@ class MainViewModel @Inject constructor(
     }
 
     fun getUsers() {
-        viewModelScope.launch { getUsersUseCase.invoke() }
+        viewModelScope.launch { val res=getUsersUseCase.invoke()
+            Log.d("TAG", "getUsers: $res")
+        }
     }
 
    private fun loginUser() {

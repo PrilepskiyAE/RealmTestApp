@@ -4,6 +4,8 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
     id 'io.realm.kotlin'
+
+
 }
 
 android {
@@ -70,4 +72,5 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:2.44"
     implementation 'io.realm.kotlin:library-base:1.8.0'
     implementation 'io.realm.kotlin:library-sync:1.8.0'
+    implementation "io.realm:realm-gradle-plugin:10.4.0"
 }
